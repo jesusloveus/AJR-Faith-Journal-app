@@ -1,0 +1,54 @@
+.bible-tts-container {
+    margin: 40px auto;
+    padding: 20px;
+    max-width: 600px;
+    background-color: #fff0f6;
+    border: 2px solid #ffd6e7;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(255, 182, 193, 0.3);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.bible-tts-title {
+    text-align: center;
+    color: #d63384;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.bible-tts-controls label {
+    display: block;
+    margin: 10px 0;
+    color: #444;
+}
+
+.bible-tts-controls select,
+.bible-tts-controls input[type="range"] {
+    margin-left: 10px;
+}
+
+.bible-tts-buttons {
+    margin-top: 10px;
+}
+
+.bible-tts-buttons button {
+    margin-right: 10px;
+    padding: 8px 16px;
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.bible-tts-buttons button:hover {
+    background-color: #d63384;
+}
+
+.bible-tts-story-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    border: 1px solid #ffc0cb;
+}

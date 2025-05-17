@@ -1,0 +1,67 @@
+/* src/components/Prayer.css */
+
+.page {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff8f5;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.prayer-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.prayer-form h3 {
+    font-size: 1.5rem;
+    color: #c27ba0;
+    margin-bottom: 10px;
+}
+
+.prayer-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #444;
+}
+
+.prayer-form textarea {
+    resize: vertical;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    min-height: 100px;
+    margin-bottom: 10px;
+}
+
+.prayer-form button {
+    background-color: #f497b5;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.prayer-form button:hover {
+    background-color: #e07a9b;
+}
+
+.request-card {
+    background-color: #fff0f6;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 5px solid #f497b5;
+}
+
+.request-card strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #c27ba0;
+}

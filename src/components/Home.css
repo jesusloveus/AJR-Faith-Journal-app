@@ -1,0 +1,68 @@
+
+
+
+.home {
+    text-align: center;
+    padding: 2rem;
+    background-color: #fff0f5;
+    border-radius: 12px;
+    margin-top: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.home h1 {
+    color: #cc3366;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.home p {
+    color: #b2e00f;
+    font-size: 1.1rem;
+}
+/* src/components/Home.css */
+.page {
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+}
+
+.page h1 {
+    font-size: 2.5rem;
+    color: #a94442;
+    margin-bottom: 10px;
+}
+
+.page p {
+    font-size: 1.2rem;
+    color: #555;
+}
+.verse-box {
+    background: rgba(255, 255, 255, 0.8);
+    border-left: 6px solid #f6c1cc;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.home-page {
+    text-align: center;
+    color: #fff;
+    padding: 2rem;
+}
+
+.verse-box {
+    background-color: rgba(228, 116, 11, 0.6);
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 600px;
+    margin: auto;
+    box-shadow: 0 0 15px rgba(232, 13, 13, 0.3);
+}
+
+.verse-box h3,
+.verse-box h4 {
+    margin-top: 0;
+    color: rgb(248, 50, 162);
+}

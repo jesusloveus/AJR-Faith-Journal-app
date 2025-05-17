@@ -1,0 +1,21 @@
+/* About.css */
+.page {
+    padding: 1rem;
+}
+
+.about-content {
+    background: #d67a1e;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.about-content h2 {
+    color: #d88fa8;
+    margin-bottom: 0.5rem;
+}
+
+.about-content p {
+    color: #ae2424;
+    line-height: 1.6;
+}
