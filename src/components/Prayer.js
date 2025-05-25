@@ -1,88 +1,79 @@
-// src/components/Prayer.js
 import React, { useState, useEffect } from 'react';
-import './Prayer.css';
 import EditModal from './EditModal';
 
 const Prayer = () =>
 {
-    const [ request, setRequest ] = useState( '' );
-    const [ requests, setRequests ] = useState( [] );
+    const [ prayers, setPrayers ] = useState( [] );
+    const [ newPrayer, setNewPrayer ] = useState( '' );
     const [ editingIndex, setEditingIndex ] = useState( null );
-    const [ showEditModal, setShowEditModal ] = useState( false );
-    const [ selectedRequest, setSelectedRequest ] = useState( null );
 
+    // Load saved prayers from localStorage
     useEffect( () =>
     {
-        const savedRequests = JSON.parse( localStorage.getItem( 'prayerRequests' ) ) || [];
-        setRequests( savedRequests );
+        const saved = JSON.parse( localStorage.getItem( 'prayerEntries' ) ) || [];
+        setPrayers( saved );
     }, [] );
 
+    // Save prayers to localStorage whenever they change
     useEffect( () =>
     {
-        localStorage.setItem( 'prayerRequests', JSON.stringify( requests ) );
-    }, [ requests ] );
+        localStorage.setItem( 'prayerEntries', JSON.stringify( prayers ) );
+    }, [ prayers ] );
 
-    const handleAdd = () =>
+    const addPrayer = () =>
     {
-        if ( request.trim() )
+        if ( newPrayer.trim() )
         {
-            const newRequest = { text: request, date: new Date().toLocaleDateString() };
-            setRequests( [ newRequest, ...requests ] );
-            setRequest( '' );
+            const entry = {
+                text: newPrayer,
+                date: new Date().toLocaleDateString()
+            };
+            setPrayers( [ entry, ...prayers ] );
+            setNewPrayer( '' );
         }
     };
 
-    const handleDelete = ( index ) =>
+    const deletePrayer = ( index ) =>
     {
-        const updatedRequests = [ ...requests ];
-        updatedRequests.splice( index, 1 );
-        setRequests( updatedRequests );
+        const updated = [ ...prayers ];
+        updated.splice( index, 1 );
+        setPrayers( updated );
     };
 
-    const handleEdit = ( index ) =>
+    const saveEdit = ( updatedText ) =>
     {
-        setEditingIndex( index );
-        setSelectedRequest( requests[ index ] );
-        setShowEditModal( true );
-    };
-
-    const handleSaveEdit = ( updatedRequest ) =>
-    {
-        const updatedRequests = [ ...requests ];
-        updatedRequests[ editingIndex ] = updatedRequest;
-        setRequests( updatedRequests );
-        setShowEditModal( false );
+        const updated = [ ...prayers ];
+        updated[ editingIndex ].text = updatedText;
+        setPrayers( updated );
         setEditingIndex( null );
-        setSelectedRequest( null );
     };
 
     return (
         <div className="page">
-            <div className="prayer-form">
-                <h3>Prayer Request</h3>
-                <label htmlFor="request">Enter your prayer:</label>
-                <textarea
-                    id="request"
-                    value={ request }
-                    onChange={ ( e ) => setRequest( e.target.value ) }
-                />
-                <button onClick={ handleAdd }>Add Prayer</button>
-            </div>
+            <h2>Prayer Requests</h2>
+            <textarea
+                value={ newPrayer }
+                onChange={ ( e ) => setNewPrayer( e.target.value ) }
+                placeholder="Write your prayer..."
+            />
+            <button onClick={ addPrayer }>Add Prayer</button>
 
-            { requests.map( ( r, i ) => (
-                <div key={ i } className="entry-card">
-                    <strong>{ r.date }</strong>
-                    <p>{ r.text }</p>
-                    <button onClick={ () => handleEdit( i ) }>Edit</button>
-                    <button onClick={ () => handleDelete( i ) }>Delete</button>
-                </div>
-            ) ) }
+            <ul>
+                { prayers.map( ( prayer, i ) => (
+                    <li key={ i } className="entry-card">
+                        <strong>{ prayer.date }</strong>
+                        <p>{ prayer.text }</p>
+                        <button onClick={ () => setEditingIndex( i ) }>Edit</button>
+                        <button onClick={ () => deletePrayer( i ) }>Delete</button>
+                    </li>
+                ) ) }
+            </ul>
 
-            { showEditModal && selectedRequest && (
+            { editingIndex !== null && (
                 <EditModal
-                    entry={ selectedRequest }
-                    onSave={ handleSaveEdit }
-                    onClose={ () => setShowEditModal( false ) }
+                    initialText={ prayers[ editingIndex ].text }
+                    onSave={ saveEdit }
+                    onCancel={ () => setEditingIndex( null ) }
                 />
             ) }
         </div>

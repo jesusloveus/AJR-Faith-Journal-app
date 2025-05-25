@@ -1,51 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import './Login.css';
-
-
+import React, { useState, useEffect } from 'react';
+import EditModal from './EditModal';
 
 const JournalHistory = () =>
 {
-    const [ entries, setEntries ] = useState( [] );
+    const [ history, setHistory ] = useState( [] );
+    const [ editingIndex, setEditingIndex ] = useState( null );
 
+    // Load from localStorage when component mounts
     useEffect( () =>
     {
-        const savedEntries = JSON.parse( localStorage.getItem( 'journalEntries' ) ) || [];
-        setEntries( savedEntries );
+        const saved = JSON.parse( localStorage.getItem( 'journalEntries' ) ) || [];
+        setHistory( saved );
     }, [] );
 
-    const handleDelete = ( index ) =>
+    // Save back to localStorage on change
+    useEffect( () =>
     {
-        const updated = entries.filter( ( _, i ) => i !== index );
-        setEntries( updated );
-        localStorage.setItem( 'journalEntries', JSON.stringify( updated ) );
+        localStorage.setItem( 'journalEntries', JSON.stringify( history ) );
+    }, [ history ] );
+
+    const deleteEntry = ( index ) =>
+    {
+        const updated = [ ...history ];
+        updated.splice( index, 1 );
+        setHistory( updated );
     };
 
-    const handleEdit = ( index ) =>
+    const saveEdit = ( updatedText ) =>
     {
-        const newText = prompt( "Edit your journal entry:", entries[ index ].text );
-        if ( newText !== null && newText.trim() !== '' )
-        {
-            const updated = [ ...entries ];
-            updated[ index ].text = newText;
-            setEntries( updated );
-            localStorage.setItem( 'journalEntries', JSON.stringify( updated ) );
-        }
+        const updated = [ ...history ];
+        updated[ editingIndex ].text = updatedText;
+        setHistory( updated );
+        setEditingIndex( null );
     };
 
     return (
         <div className="page">
-            <h3>Past Journal Entries</h3>
-            { entries.length === 0 ? (
-                <p>No past journal entries found.</p>
+            <h2>Journal History</h2>
+            { history.length === 0 ? (
+                <p>No journal entries found.</p>
             ) : (
-                entries.map( ( entry, index ) => (
-                    <div key={ index } className="entry-card">
-                        <strong>{ entry.date }</strong>
-                        <p>{ entry.text }</p>
-                        <button onClick={ () => handleEdit( index ) }>Edit</button>
-                        <button onClick={ () => handleDelete( index ) }>Delete</button>
-                    </div>
-                ) )
+                <ul>
+                    { history.map( ( entry, i ) => (
+                        <li key={ i } className="entry-card">
+                            <strong>{ entry.date }</strong>
+                            <p>{ entry.text }</p>
+                            <button onClick={ () => setEditingIndex( i ) }>Edit</button>
+                            <button onClick={ () => deleteEntry( i ) }>Delete</button>
+                        </li>
+                    ) ) }
+                </ul>
+            ) }
+
+            { editingIndex !== null && (
+                <EditModal
+                    initialText={ history[ editingIndex ].text }
+                    onSave={ saveEdit }
+                    onCancel={ () => setEditingIndex( null ) }
+                />
             ) }
         </div>
     );

@@ -1,12 +1,43 @@
+/* === GLOBAL STYLES === */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fefefe;
+}
+
+button {
+    background-color: #d63384;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #b0276b;
+}
+
+/* === BIBLE STORY TTS STYLES === */
+.bible-tts-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
 .bible-tts-container {
-    margin: 40px auto;
+    margin: auto;
     padding: 20px;
     max-width: 600px;
     background-color: #fff0f6;
     border: 2px solid #ffd6e7;
     border-radius: 20px;
     box-shadow: 0 4px 10px rgba(255, 182, 193, 0.3);
-    font-family: 'Segoe UI', sans-serif;
 }
 
 .bible-tts-title {
@@ -51,4 +82,42 @@
     border-radius: 15px;
     margin-top: 20px;
     border: 1px solid #ffc0cb;
+}
+
+/* === JOURNAL & PRAYER PAGE STYLES === */
+.page {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fef8fc;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(79, 19, 19, 0.1);
+}
+
+.entry-card,
+.prayer-card {
+    background-color: #ffffff;
+    border-left: 4px solid #ffc0cb;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.entry-card strong,
+.prayer-card strong {
+    color: #d63384;
+    font-size: 1.1rem;
+}
+
+.entry-card p,
+.prayer-card p {
+    margin-top: 8px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.journal-form,
+.prayer-form {
+    margin-bottom: 30px;
 }

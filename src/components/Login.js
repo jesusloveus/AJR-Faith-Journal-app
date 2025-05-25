@@ -1,13 +1,16 @@
-import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
-import AuthLayout from "./AuthLayout";
+// Login.js
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase'; 
+import './Login.css';
 
 const Login = () =>
 {
-    const [ email, setEmail ] = useState( "" );
-    const [ password, setPassword ] = useState( "" );
-    const [ error, setError ] = useState( "" );
+    const [ email, setEmail ] = useState( '' );
+    const [ password, setPassword ] = useState( '' );
+    const [ error, setError ] = useState( '' );
+    const navigate = useNavigate();
 
     const handleLogin = async ( e ) =>
     {
@@ -15,57 +18,35 @@ const Login = () =>
         try
         {
             await signInWithEmailAndPassword( auth, email, password );
-            alert( "Logged in successfully!" );
+            navigate( '/home' ); // Redirect to home page code here
         } catch ( err )
         {
-            setError( err.message );
+            setError( 'Invalid email or password' );
         }
     };
 
     return (
-        <AuthLayout>
-            <form
-                onSubmit={ handleLogin }
-                style={ {
-                    backgroundColor: "rgba(255, 255, 255, 0.9)",
-                    padding: "30px",
-                    borderRadius: "10px",
-                    width: "300px",
-                    boxShadow: "0 0 10px rgba(0,0,0,0.3)",
-                } }
-            >
-                <h2 style={ { textAlign: "center", marginBottom: "20px" } }>Login</h2>
+        <div className="login-container">
+            <h2>Login</h2>
+            <form onSubmit={ handleLogin }>
                 <input
                     type="email"
                     placeholder="Email"
+                    value={ email }
                     onChange={ ( e ) => setEmail( e.target.value ) }
                     required
-                    style={ { width: "100%", padding: "10px", marginBottom: "10px" } }
-                />
+                /><br />
                 <input
                     type="password"
                     placeholder="Password"
+                    value={ password }
                     onChange={ ( e ) => setPassword( e.target.value ) }
                     required
-                    style={ { width: "100%", padding: "10px", marginBottom: "10px" } }
-                />
-                <button
-                    type="submit"
-                    style={ {
-                        width: "100%",
-                        padding: "10px",
-                        backgroundColor: "#4CAF50",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                    } }
-                >
-                    Login
-                </button>
-                { error && <p style={ { color: "red", marginTop: "10px" } }>{ error }</p> }
+                /><br />
+                <button type="submit">Login</button>
+                { error && <p style={ { color: 'red' } }>{ error }</p> }
             </form>
-        </AuthLayout>
+        </div>
     );
 };
 

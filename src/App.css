@@ -40,7 +40,7 @@ html {
 /* Header and Nav Styling */
 .app-header {
     margin-top: 20px;
-    color: #470e53;
+    color: #c91aec;
     font-size: 3rem;
     font-weight: bold;
     text-align: center;
@@ -48,7 +48,7 @@ html {
 
 .top-nav a {
     margin: 0 10px;
-    color: #2c3e50;
+    color: #0ccff1;
     text-decoration: none;
     font-weight: bold;
 }

@@ -1,96 +1,81 @@
-// src/components/Journal.js
 import React, { useState, useEffect } from 'react';
-import './Journal.css';
 import EditModal from './EditModal';
-import BibleStoryTTS from './BibleStoryTTS';
-import './BibleStoryTTS.css';
+
 const Journal = () =>
 {
-    const [ entry, setEntry ] = useState( '' );
     const [ entries, setEntries ] = useState( [] );
+    const [ newEntry, setNewEntry ] = useState( '' );
     const [ editingIndex, setEditingIndex ] = useState( null );
-    const [ showEditModal, setShowEditModal ] = useState( false );
-    const [ selectedEntry, setSelectedEntry ] = useState( null );
 
+    // Load from localStorage when component mounts
     useEffect( () =>
     {
-        const savedEntries = JSON.parse( localStorage.getItem( 'journalEntries' ) ) || [];
-        setEntries( savedEntries );
+        const saved = JSON.parse( localStorage.getItem( 'journalEntries' ) ) || [];
+        setEntries( saved );
     }, [] );
 
+    // Save to localStorage whenever entries change
     useEffect( () =>
     {
         localStorage.setItem( 'journalEntries', JSON.stringify( entries ) );
     }, [ entries ] );
 
-    const handleAdd = () =>
+    const addEntry = () =>
     {
-        if ( entry.trim() )
+        if ( newEntry.trim() )
         {
-            const newEntry = { text: entry, date: new Date().toLocaleDateString() };
-            setEntries( [ newEntry, ...entries ] );
-            setEntry( '' );
+            const entry = {
+                text: newEntry,
+                date: new Date().toLocaleDateString()
+            };
+            setEntries( [ entry, ...entries ] );
+            setNewEntry( '' );
         }
     };
 
-    const handleDelete = ( index ) =>
+    const deleteEntry = ( index ) =>
     {
-        const updatedEntries = [ ...entries ];
-        updatedEntries.splice( index, 1 );
-        setEntries( updatedEntries );
+        const updated = [ ...entries ];
+        updated.splice( index, 1 );
+        setEntries( updated );
     };
 
-    const handleEdit = ( index ) =>
+    const saveEdit = ( updatedText ) =>
     {
-        setEditingIndex( index );
-        setSelectedEntry( entries[ index ] );
-        setShowEditModal( true );
-    };
-
-    const handleSaveEdit = ( updatedEntry ) =>
-    {
-        const updatedEntries = [ ...entries ];
-        updatedEntries[ editingIndex ] = updatedEntry;
-        setEntries( updatedEntries );
-        setShowEditModal( false );
+        const updated = [ ...entries ];
+        updated[ editingIndex ].text = updatedText;
+        setEntries( updated );
         setEditingIndex( null );
-        setSelectedEntry( null );
     };
 
     return (
         <div className="page">
-            <div className="journal-form">
-                <h3>Today's Reflection</h3>
-                <label htmlFor="entry">Write your thoughts:</label>
-                <textarea
-                    id="entry"
-                    value={ entry }
-                    onChange={ ( e ) => setEntry( e.target.value ) }
-                />
-                <button onClick={ handleAdd }>Add Entry</button>
-            </div>
+            <h2>Journal</h2>
+            <textarea
+                value={ newEntry }
+                onChange={ ( e ) => setNewEntry( e.target.value ) }
+                placeholder="Write your journal entry..."
+            />
+            <button onClick={ addEntry }>Add Entry</button>
 
-            { entries.map( ( e, i ) => (
-                <div key={ i } className="entry-card">
-                    <strong>{ e.date }</strong>
-                    <p>{ e.text }</p>
-                    <button onClick={ () => handleEdit( i ) }>Edit</button>
-                    <button onClick={ () => handleDelete( i ) }>Delete</button>
-                </div>
-            ) ) }
+            <ul>
+                { entries.map( ( entry, i ) => (
+                    <li key={ i } className="entry-card">
+                        <strong>{ entry.date }</strong>
+                        <p>{ entry.text }</p>
+                        <button onClick={ () => setEditingIndex( i ) }>Edit</button>
+                        <button onClick={ () => deleteEntry( i ) }>Delete</button>
+                    </li>
+                ) ) }
+            </ul>
 
-            { showEditModal && selectedEntry && (
+            { editingIndex !== null && (
                 <EditModal
-                    entry={ selectedEntry }
-                    onSave={ handleSaveEdit }
-                    onClose={ () => setShowEditModal( false ) }
+                    initialText={ entries[ editingIndex ].text }
+                    onSave={ saveEdit }
+                    onCancel={ () => setEditingIndex( null ) }
                 />
             ) }
-
-            {/* ✅ Bible Story TTS Section */ }
-            <div className="bible-story-tts">
-                <BibleStoryTTS />
-            </div>
         </div>
     );
 };

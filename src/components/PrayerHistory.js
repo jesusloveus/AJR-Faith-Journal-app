@@ -1,51 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import './Prayer.css';
-import './Journal.css';
-
+import React, { useState, useEffect } from 'react';
+import EditModal from './EditModal';
 
 const PrayerHistory = () =>
 {
-    const [ requests, setRequests ] = useState( [] );
+    const [ prayers, setPrayers ] = useState( [] );
+    const [ editingIndex, setEditingIndex ] = useState( null );
 
+    // Load prayers from localStorage
     useEffect( () =>
     {
-        const saved = JSON.parse( localStorage.getItem( 'prayerRequests' ) ) || [];
-        setRequests( saved );
+        const saved = JSON.parse( localStorage.getItem( 'prayerEntries' ) ) || [];
+        setPrayers( saved );
     }, [] );
 
-    const handleDelete = ( index ) =>
+    // Save to localStorage when prayers change
+    useEffect( () =>
     {
-        const updated = requests.filter( ( _, i ) => i !== index );
-        setRequests( updated );
-        localStorage.setItem( 'prayerRequests', JSON.stringify( updated ) );
+        localStorage.setItem( 'prayerEntries', JSON.stringify( prayers ) );
+    }, [ prayers ] );
+
+    const deletePrayer = ( index ) =>
+    {
+        const updated = [ ...prayers ];
+        updated.splice( index, 1 );
+        setPrayers( updated );
     };
 
-    const handleEdit = ( index ) =>
+    const saveEdit = ( updatedText ) =>
     {
-        const newText = prompt( "Edit your prayer request:", requests[ index ].text );
-        if ( newText !== null && newText.trim() !== '' )
-        {
-            const updated = [ ...requests ];
-            updated[ index ].text = newText;
-            setRequests( updated );
-            localStorage.setItem( 'prayerRequests', JSON.stringify( updated ) );
-        }
+        const updated = [ ...prayers ];
+        updated[ editingIndex ].text = updatedText;
+        setPrayers( updated );
+        setEditingIndex( null );
     };
 
     return (
         <div className="page">
-            <h3>Past Prayer Requests</h3>
-            { requests.length === 0 ? (
-                <p>No past prayer requests found.</p>
+            <h2>Prayer History</h2>
+            { prayers.length === 0 ? (
+                <p>No saved prayers yet.</p>
             ) : (
-                requests.map( ( request, index ) => (
-                    <div key={ index } className="entry-card">
-                        <strong>{ request.date }</strong>
-                        <p>{ request.text }</p>
-                        <button onClick={ () => handleEdit( index ) }>Edit</button>
-                        <button onClick={ () => handleDelete( index ) }>Delete</button>
-                    </div>
-                ) )
+                <ul>
+                    { prayers.map( ( entry, i ) => (
+                        <li key={ i } className="entry-card">
+                            <strong>{ entry.date }</strong>
+                            <p>{ entry.text }</p>
+                            <button onClick={ () => setEditingIndex( i ) }>Edit</button>
+                            <button onClick={ () => deletePrayer( i ) }>Delete</button>
+                        </li>
+                    ) ) }
+                </ul>
+            ) }
+
+            { editingIndex !== null && (
+                <EditModal
+                    initialText={ prayers[ editingIndex ].text }
+                    onSave={ saveEdit }
+                    onCancel={ () => setEditingIndex( null ) }
+                />
             ) }
         </div>
     );
